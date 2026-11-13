@@ -8,12 +8,12 @@ import {
   Building2,
   ChevronRight,
   CircleDashed,
-  FileText,
   GraduationCap,
   MessageSquareText,
   ShieldCheck,
   Sparkles,
   TrendingUp,
+  Users,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
@@ -43,41 +43,53 @@ const featureCards = [
   { title: "Real-time visibility", description: "Give students and recruiters timely updates without chasing manual status checks.", icon: CircleDashed },
 ];
 
-const featuredCompanies = ["Microsoft", "Google", "Amazon", "Flipkart", "Infosys", "Jio", "Cognizant", "Oracle"];
+const featuredCompanies = ["Apex Systems", "Nexa Cloud", "ByteForge", "Microsoft", "Google", "Amazon", "Infosys", "Cognizant"];
 
 const steps = [
-  "Students publish profiles and resumes.",
-  "Placement teams verify eligibility and drive rules.",
-  "Recruiters discover top-fit candidates and arrange interviews.",
+  "Students publish profiles and upload verified resumes.",
+  "Placement teams audit eligibility, manage drives, and track compliance.",
+  "Recruiters discover top talent, shortlist candidates, and coordinate interviews.",
 ];
 
 const portalHighlights = [
   {
     title: "Student Portal",
-    copy: "Monitor eligibility, explore verified opportunities, manage resumes, and follow recruiter updates in real time.",
+    role: "student",
+    copy: "Monitor eligibility, explore verified opportunities, manage resumes, and track live application status.",
   },
   {
-    title: "Placement Cell / Administrator Portal",
-    copy: "Control company approvals, student verification, hiring health, and placement performance from one command center.",
+    title: "Placement Cell & Admin",
+    role: "admin",
+    copy: "Control company approvals, student verification, placement drives, and compliance from one control center.",
   },
   {
-    title: "Company / Recruiter Portal",
-    copy: "Access curated student pools, review shortlists, coordinate interviews, and manage hiring pipelines with precision.",
+    title: "Company & Recruiter Portal",
+    role: "recruiter",
+    copy: "Access curated candidate pools, review shortlists, coordinate interview slots, and manage hiring funnels.",
+  },
+  {
+    title: "Super Admin & Governance",
+    role: "super_admin",
+    copy: "Control multi-institution settings, manage platform user accounts, administer role permissions, and view macro analytics.",
   },
 ];
 
 const faqs = [
   {
-    question: "How does CampusPulse support three distinct user groups?",
-    answer: "Each role has dedicated permissions, dashboards, and workflows for students, administrators, and recruiters.",
+    question: "How does CampusPulse support multiple distinct user groups?",
+    answer: "Each role (Student, Placement Admin, Recruiter, Super Admin) has a dedicated portal with tailored permissions, interactive dashboards, and specialized workflows.",
   },
   {
-    question: "Can the platform work with existing university systems?",
-    answer: "The interface is designed for easy extension into Supabase-authenticated admissions and recruitment data sources.",
+    question: "How does the authentication and session management work?",
+    answer: "The platform uses cryptographically signed session tokens stored in secure HTTP cookies, combined with server-side role validation on all API endpoints.",
   },
   {
-    question: "What makes the experience premium?",
-    answer: "Editorial typography, structured composition, meaningful motion, and attention to operational clarity set the product apart.",
+    question: "Can I test all four portal roles immediately?",
+    answer: "Yes! The sign-in page features 1-click demo accounts for all roles (Student, Admin, Recruiter, and Super Admin) with pre-seeded data.",
+  },
+  {
+    question: "Are student documents and resumes supported?",
+    answer: "Yes. Students can upload, manage, and download PDF resumes (up to 2 MB) that are linked directly to placement drive applications.",
   },
 ];
 
@@ -96,19 +108,19 @@ export function LandingPage() {
           </Link>
 
           <nav className="hidden items-center gap-8 text-sm text-slate-600 md:flex">
-            <Link href="#platform">Platform</Link>
-            <Link href="#opportunities">Opportunities</Link>
-            <Link href="#portals">Portals</Link>
-            <Link href="#faq">FAQ</Link>
+            <Link href="#platform" className="hover:text-slate-900">Platform</Link>
+            <Link href="#opportunities" className="hover:text-slate-900">Opportunities</Link>
+            <Link href="#portals" className="hover:text-slate-900">Portals</Link>
+            <Link href="#faq" className="hover:text-slate-900">FAQ</Link>
           </nav>
 
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <Link href="/login" className="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-500 hover:text-slate-900">
-              Access Your Portal
+              Sign In
             </Link>
-            <Link href="#opportunities" className="rounded-full bg-[#4263EB] px-4 py-2 text-sm font-medium text-white shadow-[0_10px_30px_rgba(66,99,235,0.25)] transition hover:bg-[#3650c5]">
-              Explore Opportunities
+            <Link href="/login" className="rounded-full bg-[#4263EB] px-4 py-2 text-sm font-medium text-white shadow-[0_10px_30px_rgba(66,99,235,0.25)] transition hover:bg-[#3650c5]">
+              Access Portals
             </Link>
           </div>
         </div>
@@ -119,38 +131,38 @@ export function LandingPage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(66,99,235,0.18),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(185,230,211,0.28),_transparent_22%)]" />
           <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:px-12 lg:py-24">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#111827]/10 bg-white/70 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.14em] text-slate-700">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#111827]/10 bg-white/70 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-slate-700">
                 <Sparkles className="h-3.5 w-3.5 text-[#4263EB]" />
-                Campus intelligence for hiring teams
+                University Placement Intelligence
               </div>
               <h1 className="max-w-xl text-5xl font-semibold tracking-[-0.08em] text-[#111827] sm:text-6xl">
                 Your career doesn&apos;t wait. Neither should your campus.
               </h1>
               <p className="mt-6 max-w-lg text-lg leading-8 text-slate-600">
-                One connected platform for students, recruiters and placement teams. Discover opportunities, manage recruitment and turn campus potential into careers.
+                One connected platform for students, recruiters, and placement teams. Discover opportunities, manage hiring drives, and turn campus potential into career offers.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Link href="#opportunities" className="inline-flex items-center gap-2 rounded-full bg-[#111827] px-6 py-3 text-sm font-medium text-[#F7F6F2] transition hover:bg-[#1d2942]">
-                  Explore Opportunities <ArrowRight className="h-4 w-4" />
+                <Link href="/login" className="inline-flex items-center gap-2 rounded-full bg-[#111827] px-6 py-3 text-sm font-medium text-[#F7F6F2] transition hover:bg-[#1d2942]">
+                  Explore Portals <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link href="/login" className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white/80 px-6 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-white">
-                  Access Your Portal <ChevronRight className="h-4 w-4" />
+                <Link href="#opportunities" className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white/80 px-6 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-white">
+                  View Placement Drives <ChevronRight className="h-4 w-4" />
                 </Link>
               </div>
 
               <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-slate-600">
-                <div className="flex items-center gap-2"><Building2 className="h-4 w-4 text-[#4263EB]" /> 180+ active employers</div>
-                <div className="flex items-center gap-2"><GraduationCap className="h-4 w-4 text-[#16845B]" /> 12k+ student profiles</div>
+                <div className="flex items-center gap-2"><Building2 className="h-4 w-4 text-[#4263EB]" /> 180+ verified employers</div>
+                <div className="flex items-center gap-2"><GraduationCap className="h-4 w-4 text-[#16845B]" /> 12k+ eligible graduates</div>
               </div>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.1 }} className="relative">
-              <div className="rounded-[28px] border border-slate-200 bg-white/80 p-4 shadow-[0_30px_80px_rgba(17,24,39,0.10)]">
+              <div className="rounded-[28px] border border-slate-200 bg-white/80 p-5 shadow-[0_30px_80px_rgba(17,24,39,0.10)]">
                 <div className="mb-4 flex items-center justify-between rounded-2xl bg-[#111827] px-4 py-3 text-[#F7F6F2]">
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.18em] text-slate-300">Illustrative placement pulse</p>
-                    <p className="mt-1 text-xl font-semibold">2025 hiring momentum</p>
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-slate-300">Placement Momentum</p>
+                    <p className="mt-0.5 text-xl font-semibold">2025 Hiring Pulse</p>
                   </div>
                   <TrendingUp className="h-5 w-5 text-[#B9E6D3]" />
                 </div>
@@ -159,7 +171,7 @@ export function LandingPage() {
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={chartData}>
                       <defs>
-                        <linearGradient id="fillColor" x1="0" x2="0" y1="0" y2="1">
+                        <linearGradient id="fillColor" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#4263EB" stopOpacity={0.45} />
                           <stop offset="95%" stopColor="#4263EB" stopOpacity={0.06} />
                         </linearGradient>
@@ -194,8 +206,8 @@ export function LandingPage() {
 
         <section id="platform" className="mx-auto max-w-7xl px-6 py-20 lg:px-12">
           <div className="mb-12 max-w-2xl">
-            <p className="text-xs uppercase tracking-[0.18em] text-[#4263EB]">Platform features</p>
-            <h2 className="mt-4 text-4xl font-semibold tracking-[-0.06em] text-[#111827]">Built for high-velocity hiring operations.</h2>
+            <p className="text-xs uppercase tracking-[0.18em] text-[#4263EB]">Core Capabilities</p>
+            <h2 className="mt-3 text-4xl font-semibold tracking-[-0.06em] text-[#111827]">Built for high-velocity hiring operations.</h2>
           </div>
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -215,35 +227,41 @@ export function LandingPage() {
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-[#B9E6D3]">Featured recruiting</p>
+                <p className="text-xs uppercase tracking-[0.18em] text-[#B9E6D3]">Featured Campus Recruitment</p>
                 <h2 className="mt-3 text-4xl font-semibold tracking-[-0.06em]">Upcoming placement drives</h2>
               </div>
               <Link href="/login" className="inline-flex items-center gap-2 rounded-full border border-slate-500 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-slate-300 hover:text-white">
-                View all roles <ChevronRight className="h-4 w-4" />
+                Sign in to apply <ChevronRight className="h-4 w-4" />
               </Link>
             </div>
 
             <div className="mt-10 grid gap-5 lg:grid-cols-3">
               {[
-                { name: "Apex Systems", role: "Software Engineer I", tag: "Bengaluru • 18.5 LPA" },
-                { name: "Nexa Cloud", role: "Frontend Engineer", tag: "Hyderabad • 22.0 LPA" },
-                { name: "ByteForge", role: "Data Engineer", tag: "Pune • 15.8 LPA" },
+                { name: "Apex Systems", role: "Software Engineer I", tag: "Bengaluru • ₹18.5 LPA", deadline: "12 Jul 2025" },
+                { name: "Nexa Cloud", role: "Frontend Engineer", tag: "Hyderabad • ₹22.0 LPA", deadline: "18 Jul 2025" },
+                { name: "ByteForge", role: "Data Engineer", tag: "Pune • ₹15.8 LPA", deadline: "23 Jul 2025" },
               ].map((job) => (
-                <div key={job.name} className="rounded-[24px] border border-slate-700 bg-[#181f2e] p-6">
-                  <div className="flex items-center justify-between">
-                    <span className="rounded-full bg-[#B9E6D3] px-2.5 py-1 text-xs font-medium text-[#111827]">Open</span>
-                    <span className="text-xs text-slate-300">Illustrative role</span>
+                <div key={job.name} className="flex flex-col justify-between rounded-[24px] border border-slate-700 bg-[#181f2e] p-6">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <span className="rounded-full bg-[#B9E6D3] px-2.5 py-1 text-xs font-semibold text-[#111827]">Open Drive</span>
+                      <span className="text-xs text-slate-400">Deadline: {job.deadline}</span>
+                    </div>
+                    <h3 className="mt-4 text-2xl font-semibold text-white">{job.role}</h3>
+                    <p className="mt-1 text-slate-300">{job.name}</p>
+                    <div className="mt-4 rounded-xl border border-slate-700 bg-slate-900/60 p-3 text-sm text-slate-200">{job.tag}</div>
                   </div>
-                  <h3 className="mt-5 text-2xl font-semibold text-white">{job.role}</h3>
-                  <p className="mt-2 text-slate-300">{job.name}</p>
-                  <div className="mt-5 rounded-2xl border border-slate-700 bg-slate-900/60 p-3 text-sm text-slate-200">{job.tag}</div>
+                  <Link href="/login" className="mt-5 inline-flex items-center gap-1 text-xs font-semibold text-[#B9E6D3] hover:underline">
+                    Apply in student portal →
+                  </Link>
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <span className="text-xs uppercase tracking-wider text-slate-400 mr-2">Top hiring partners:</span>
               {featuredCompanies.map((company) => (
-                <div key={company} className="rounded-full border border-slate-700 bg-slate-900/60 px-4 py-2 text-sm font-medium text-slate-200">
+                <div key={company} className="rounded-full border border-slate-700 bg-slate-900/60 px-4 py-1.5 text-xs font-medium text-slate-200">
                   {company}
                 </div>
               ))}
@@ -251,50 +269,37 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-6 py-20 lg:px-12">
-          <div className="mb-12 text-center">
-            <p className="text-xs uppercase tracking-[0.18em] text-[#4263EB]">Success stories</p>
-            <h2 className="mt-4 text-4xl font-semibold tracking-[-0.06em] text-[#111827]">Students launch stronger careers.</h2>
-          </div>
-
-          <div className="grid gap-5 lg:grid-cols-3">
-            {[
-              { name: "Aisha R.", quote: "The platform made the hiring process transparent. I could track every shortlist and stay informed without missing deadlines." },
-              { name: "Rohan K.", quote: "I used the resume manager and profile verification flow to present a polished profile to recruiters." },
-              { name: "Sana M.", quote: "The recruiter communication and event updates felt simple, timely, and highly professional." },
-            ].map((story) => (
-              <div key={story.name} className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="mb-4 flex items-center gap-2 text-[#D99B37]">
-                  {Array.from({ length: 5 }).map((_, i) => <span key={i}>★</span>)}
-                </div>
-                <p className="text-base leading-7 text-slate-700">“{story.quote}”</p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#B9E6D3] text-sm font-semibold text-[#111827]">{story.name.slice(0, 1)}</div>
-                  <div>
-                    <p className="font-medium text-[#111827]">{story.name}</p>
-                    <p className="text-xs text-slate-500">Placement success story</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
         <section id="portals" className="bg-[#F2F5F9] py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-12">
             <div className="mb-12 max-w-2xl">
-              <p className="text-xs uppercase tracking-[0.18em] text-[#4263EB]">Three portals</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.06em] text-[#111827]">Connected, permission-aware access for every stakeholder.</h2>
+              <p className="text-xs uppercase tracking-[0.18em] text-[#4263EB]">Role Portals</p>
+              <h2 className="mt-3 text-4xl font-semibold tracking-[-0.06em] text-[#111827]">Tailored environments for every university stakeholder.</h2>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {portalHighlights.map((portal) => (
-                <div key={portal.title} className="rounded-[26px] border border-slate-200 bg-white p-7 shadow-sm">
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#E8EEFF] text-[#4263EB]">
-                    {portal.title.includes("Student") ? <GraduationCap className="h-5 w-5" /> : portal.title.includes("Recruiter") ? <MessageSquareText className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
+                <div key={portal.title} className="flex flex-col justify-between rounded-[26px] border border-slate-200 bg-white p-6 shadow-sm">
+                  <div>
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#E8EEFF] text-[#4263EB]">
+                      {portal.title.includes("Student") ? (
+                        <GraduationCap className="h-5 w-5" />
+                      ) : portal.title.includes("Recruiter") ? (
+                        <MessageSquareText className="h-5 w-5" />
+                      ) : portal.title.includes("Super Admin") ? (
+                        <Users className="h-5 w-5" />
+                      ) : (
+                        <ShieldCheck className="h-5 w-5" />
+                      )}
+                    </div>
+                    <h3 className="text-xl font-semibold text-[#111827]">{portal.title}</h3>
+                    <p className="mt-3 text-sm leading-6 text-slate-600">{portal.copy}</p>
                   </div>
-                  <h3 className="text-2xl font-semibold text-[#111827]">{portal.title}</h3>
-                  <p className="mt-4 text-sm leading-7 text-slate-600">{portal.copy}</p>
+                  <Link
+                    href="/login"
+                    className="mt-6 inline-flex items-center gap-1.5 text-xs font-semibold text-[#4263EB] hover:underline"
+                  >
+                    Launch portal →
+                  </Link>
                 </div>
               ))}
             </div>
@@ -304,14 +309,16 @@ export function LandingPage() {
         <section className="mx-auto max-w-7xl px-6 py-20 lg:px-12">
           <div className="mb-12 max-w-2xl">
             <p className="text-xs uppercase tracking-[0.18em] text-[#4263EB]">How CampusPulse works</p>
-            <h2 className="mt-4 text-4xl font-semibold tracking-[-0.06em] text-[#111827]">From interest to offer in a streamlined flow.</h2>
+            <h2 className="mt-3 text-4xl font-semibold tracking-[-0.06em] text-[#111827]">From verified student record to confirmed offer.</h2>
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
             {steps.map((step, index) => (
               <div key={step} className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#111827] text-sm font-semibold text-[#F7F6F2]">{index + 1}</div>
-                <p className="text-lg leading-8 text-slate-700">{step}</p>
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#111827] text-sm font-semibold text-[#F7F6F2]">
+                  {index + 1}
+                </div>
+                <p className="text-base leading-7 text-slate-700">{step}</p>
               </div>
             ))}
           </div>
@@ -320,8 +327,8 @@ export function LandingPage() {
         <section id="faq" className="bg-[#111827] py-20 text-[#F7F6F2]">
           <div className="mx-auto max-w-5xl px-6 lg:px-12">
             <div className="mb-10 text-center">
-              <p className="text-xs uppercase tracking-[0.18em] text-[#B9E6D3]">FAQ</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.06em] text-white">Common questions.</h2>
+              <p className="text-xs uppercase tracking-[0.18em] text-[#B9E6D3]">Frequently Asked Questions</p>
+              <h2 className="mt-3 text-4xl font-semibold tracking-[-0.06em] text-white">Platform Questions Answered.</h2>
             </div>
 
             <div className="space-y-4">
@@ -343,33 +350,35 @@ export function LandingPage() {
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#111827] text-sm font-semibold text-[#F7F6F2]">CP</div>
               <p className="text-lg font-semibold text-[#111827]">CampusPulse</p>
             </div>
-            <p className="mt-5 text-sm leading-7 text-slate-600">The premium placement intelligence platform for modern universities and hiring teams.</p>
+            <p className="mt-4 text-sm leading-6 text-slate-600">The premier placement intelligence platform for modern universities, students, and recruitment teams.</p>
           </div>
 
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">Platform</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">Portals</p>
             <ul className="mt-4 space-y-2 text-sm text-slate-600">
-              <li>Students</li>
-              <li>Placement cell</li>
-              <li>Recruiters</li>
+              <li><Link href="/login" className="hover:text-slate-900">Student Portal</Link></li>
+              <li><Link href="/login" className="hover:text-slate-900">Placement Cell</Link></li>
+              <li><Link href="/login" className="hover:text-slate-900">Recruiter Workspace</Link></li>
+              <li><Link href="/login" className="hover:text-slate-900">Super Admin</Link></li>
             </ul>
           </div>
 
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">Resources</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">Navigation</p>
             <ul className="mt-4 space-y-2 text-sm text-slate-600">
-              <li>Opportunities</li>
-              <li>Support</li>
-              <li>Documentation</li>
+              <li><Link href="#opportunities" className="hover:text-slate-900">Opportunities</Link></li>
+              <li><Link href="#platform" className="hover:text-slate-900">Features</Link></li>
+              <li><Link href="#faq" className="hover:text-slate-900">FAQ</Link></li>
+              <li><Link href="/forgot-password" className="hover:text-slate-900">Account Recovery</Link></li>
             </ul>
           </div>
 
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">Contact</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">Support</p>
             <ul className="mt-4 space-y-2 text-sm text-slate-600">
-              <li>hello@campuspulse.io</li>
-              <li>+91 80000 12345</li>
-              <li>Support Center</li>
+              <li>support@campuspulse.edu</li>
+              <li>+91 (080) 4123-4567</li>
+              <li>Placement Office, Block A</li>
             </ul>
           </div>
         </div>

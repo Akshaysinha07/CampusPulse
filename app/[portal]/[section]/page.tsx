@@ -5,13 +5,7 @@ import { PortalResourcePage } from "@/components/portal-resource-page";
 import { allPortalRoles, portalSections } from "@/lib/portal-routes";
 import type { Role } from "@/lib/types";
 
-export function generateStaticParams() {
-  return allPortalRoles.flatMap((portal) =>
-    portalSections[portal]
-      .filter((section) => section.slug)
-      .map((section) => ({ portal: portal === "super_admin" ? "super-admin" : portal, section: section.slug })),
-  );
-}
+export const dynamic = "force-dynamic";
 
 export default function PortalSectionPage({
   params,

@@ -18,14 +18,14 @@ const mutationRoles: Record<string, string[]> = {
   profile: ["student"],
   documents: ["student"],
   companies: ["admin", "super_admin"],
-  applications: ["admin", "recruiter", "super_admin"],
+  applications: ["student", "admin", "recruiter", "super_admin"],
   students: ["admin", "super_admin"],
   drives: ["admin", "super_admin"],
   compliance: ["admin", "super_admin"],
   analytics: [],
-  candidates: ["recruiter"],
-  jobs: ["recruiter"],
-  interviews: ["recruiter"],
+  candidates: ["recruiter", "admin", "super_admin"],
+  jobs: ["recruiter", "admin", "super_admin"],
+  interviews: ["recruiter", "admin", "super_admin"],
   insights: [],
   users: ["super_admin"],
   institutions: ["super_admin"],
@@ -33,7 +33,7 @@ const mutationRoles: Record<string, string[]> = {
   settings: ["super_admin"],
   notifications: ["student", "admin", "recruiter", "super_admin"],
   activity: [],
-  announcements: [],
+  announcements: ["admin", "super_admin"],
 };
 
 function failure(message: string, code: string, status: number) {
@@ -50,8 +50,8 @@ async function authorize(request: Request, context: RouteContext) {
   return { section, session } as const;
 }
 
-function canMutate(section: string, role: string, method: "POST" | "PATCH" | "DELETE") {
-  if (section === "applications" && method === "POST" && role === "student") return true;
+function canMutate(section: string, role: string) {
+  if (section === "applications" && role === "student") return true;
   return mutationRoles[section]?.includes(role) ?? false;
 }
 
@@ -122,13 +122,13 @@ export async function GET(request: Request, context: RouteContext) {
 export async function POST(request: Request, context: RouteContext) {
   const access = await authorize(request, context);
   if ("error" in access) return access.error;
-  if (!canMutate(access.section, access.session.role, "POST")) {
+  if (!canMutate(access.section, access.session.role)) {
     return failure("You do not have permission to create this resource.", "FORBIDDEN", 403);
   }
 
   let body: Record<string, unknown>;
   try {
-    body = await request.json() as Record<string, unknown>;
+    body = (await request.json()) as Record<string, unknown>;
   } catch {
     return failure("Request body must be valid JSON.", "VALIDATION_ERROR", 400);
   }
@@ -160,15 +160,20 @@ export async function POST(request: Request, context: RouteContext) {
     return NextResponse.json({ success: true, message: "Resume uploaded.", data: created }, { status: 201 });
   }
 
-  const record = validateRecord(body);
-  if (!record) return failure("Provide valid field values.", "VALIDATION_ERROR", 400);
-
   if (access.section === "applications" && access.session.role === "student") {
+    if (typeof body.withdrawId === "string") {
+      const application = updatePortalRecord(access.section, body.withdrawId, { status: "Not applied" });
+      if (!application) return failure("This application is no longer available.", "NOT_FOUND", 404);
+      return NextResponse.json({ success: true, message: "Application withdrawn.", data: application });
+    }
     const opportunityId = typeof body.opportunityId === "string" ? body.opportunityId : "";
     const application = updatePortalRecord(access.section, opportunityId, { status: "Applied" });
     if (!application) return failure("This opportunity is no longer available.", "NOT_FOUND", 404);
     return NextResponse.json({ success: true, message: "Application submitted.", data: application });
   }
+
+  const record = validateRecord(body);
+  if (!record) return failure("Provide valid field values.", "VALIDATION_ERROR", 400);
 
   if (access.session.role === "recruiter") {
     if (typeof record.company === "string" && record.company !== RECRUITER_COMPANY) {
@@ -186,13 +191,13 @@ export async function POST(request: Request, context: RouteContext) {
 export async function PATCH(request: Request, context: RouteContext) {
   const access = await authorize(request, context);
   if ("error" in access) return access.error;
-  if (!canMutate(access.section, access.session.role, "PATCH")) {
+  if (!canMutate(access.section, access.session.role)) {
     return failure("You do not have permission to update this resource.", "FORBIDDEN", 403);
   }
 
   let body: { id?: unknown; updates?: unknown };
   try {
-    body = await request.json() as { id?: unknown; updates?: unknown };
+    body = (await request.json()) as { id?: unknown; updates?: unknown };
   } catch {
     return failure("Request body must be valid JSON.", "VALIDATION_ERROR", 400);
   }
@@ -202,7 +207,7 @@ export async function PATCH(request: Request, context: RouteContext) {
   if (Array.isArray(getPortalData(access.section)) && !id) {
     return failure("A record ID is required.", "VALIDATION_ERROR", 400);
   }
-  if (access.session.role === "recruiter" && (!id || !belongsToRecruiter(access.section, id))) {
+  if (access.session.role === "recruiter" && id && !belongsToRecruiter(access.section, id)) {
     return failure("This record is outside your company's authorized scope.", "FORBIDDEN", 403);
   }
   if (access.session.role === "recruiter" && typeof updates.company === "string" && updates.company !== RECRUITER_COMPANY) {
@@ -216,11 +221,18 @@ export async function PATCH(request: Request, context: RouteContext) {
 export async function DELETE(request: Request, context: RouteContext) {
   const access = await authorize(request, context);
   if ("error" in access) return access.error;
-  if (!canMutate(access.section, access.session.role, "DELETE")) {
+  if (!canMutate(access.section, access.session.role)) {
     return failure("You do not have permission to delete this resource.", "FORBIDDEN", 403);
   }
   const id = new URL(request.url).searchParams.get("id");
   if (!id) return failure("A record ID is required.", "VALIDATION_ERROR", 400);
+
+  if (access.section === "applications" && access.session.role === "student") {
+    const updated = updatePortalRecord(access.section, id, { status: "Not applied" });
+    if (!updated) return failure("Application not found.", "NOT_FOUND", 404);
+    return NextResponse.json({ success: true, message: "Application withdrawn.", data: { id } });
+  }
+
   if (access.session.role === "recruiter" && !belongsToRecruiter(access.section, id)) {
     return failure("This record is outside your company's authorized scope.", "FORBIDDEN", 403);
   }

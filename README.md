@@ -1,59 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CampusPulse — University Placement & Recruitment Intelligence Platform
 
-## Getting Started
+CampusPulse is a Next.js 16 full-stack university placement platform with role-based environments for **Students**, **Placement Administrators**, **Recruiters**, and **Super Admins**.
 
-First, run the development server:
+---
 
+## 🚀 Quick Start
+
+### 1. Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Run the Development Server
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000) in your web browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Build & Run Production Mode
+```bash
+npm run build
+npm run start
+```
 
-## Portal pages and APIs
+---
 
-The portal navigation opens role-specific pages under `/student/*`, `/admin/*`,
-`/recruiter/*`, and `/super-admin/*`. These pages use the authenticated
-`/api/portal/[section]` API for listing, searching, and supported create/update/
-delete actions. API access is checked against the signed session cookie and the
-role allowed for each section. Recruiter records are scoped to the demo
-recruiter's authorized company.
+## 👥 Demo User Credentials (1-Click Login Supported)
 
-The portal includes a theme toggle on public and authenticated pages. The
-selection is saved in browser local storage.
+The sign-in page at `/login` provides **1-Click Demo Login** buttons and pre-fill buttons for all 4 roles:
 
-### Demo data and production setup
+| Role | Name | Email | Password | Direct Portal |
+| --- | --- | --- | --- | --- |
+| **Student** | Aarav Mehta | `aarav.mehta@campus.edu.in` | `password123` | `/student` |
+| **Placement Admin** | Meera Nair | `meera.nair@campus.edu` | `password123` | `/admin` |
+| **Recruiter** | Rishi Agrawal | `rishi.agrawal@recruiter.io` | `password123` | `/recruiter` |
+| **Super Admin** | Aisha Rao | `aisha.rao@campuspulse.edu` | `password123` | `/super-admin` |
 
-The API currently operates on seeded in-memory demo records. Changes are
-available to the running server process, but are not durable across a server
-restart and are not a substitute for a production database. No Supabase
-credentials or persistent database schema are configured in this workspace.
-Before production use, connect the API data layer to a configured database,
-enable database-level row policies, and configure an email provider for account
-recovery. The forgot-password page clearly reports that email delivery is not
-configured rather than claiming that a reset email was sent.
+---
 
-## Learn More
+## ✨ Feature Highlights & Improvements
 
-To learn more about Next.js, take a look at the following resources:
+1. **Authentication & Session Security**:
+   - Cryptographically signed HS256 session token stored in an `httpOnly`, `sameSite: lax` cookie (`campuspulse.session`).
+   - Server-side role validation on every route handler and portal resource.
+   - Fully working password reset flow (`/forgot-password`) supporting instant demo account credential updates.
+   - Hydration-safe React 19 external store state eliminating SSR/CSR flicker.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Student Portal (`/student`)**:
+   - **Overview Dashboard**: Live profile completion, active applications, unread notices, and timeline.
+   - **Profile Manager** (`/student/profile`): Edit contact details, CGPA, graduation year, degree, and links.
+   - **Documents & Resumes** (`/student/documents`): Download valid pre-seeded PDF resumes, upload new PDF files (up to 2 MB), and delete documents.
+   - **Available Opportunities & Applications** (`/student/applications`): Apply for eligible campus drives with 1-click, view live application status, or withdraw applications.
+   - **Company Explorer** (`/student/companies`): Search visiting companies, package ranges, and open roles.
+   - **Notifications** (`/student/notifications`): View and mark notifications as read.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Placement Admin Portal (`/admin`)**:
+   - **Command Center Overview**: Batch health checks, compliance queues, and quick metrics.
+   - **Student Management** (`/admin/students`): Search students, filter by department, update eligibility status (`Eligible`, `Review`, `Placed`, `Ineligible`), and add new student records.
+   - **Placement Drives** (`/admin/drives`): Schedule drives, set deadlines, and manage drive status (`Open`, `Ongoing`, `Completed`, `Closed`).
+   - **Compliance Queue** (`/admin/compliance`): Review and approve verification checks (`Pending`, `Review`, `Approved`, `Flagged`).
+   - **Placement Analytics** (`/admin/analytics`): Interactive Recharts bar charts showing department distributions and placement success rates.
 
-## Deploy on Vercel
+4. **Recruiter Portal (`/recruiter`)**:
+   - **Recruiter Workspace**: Candidate funnel metrics, shortlists, scheduled interviews, and offers.
+   - **Candidate Pool** (`/recruiter/candidates`): Advance applicants through hiring stages (`Applied`, `Screened`, `Shortlisted`, `Interviewing`, `Offer`, `Rejected`).
+   - **Job Postings** (`/recruiter/jobs`): Create, manage, and close company openings.
+   - **Interviews** (`/recruiter/interviews`): Coordinate interview slots with scheduled and completed flags.
+   - **Hiring Funnel** (`/recruiter/insights`): Interactive recruitment funnel visualization powered by Recharts.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. **Super Admin Portal (`/super-admin`)**:
+   - **Platform Governance**: Overall system metrics, registered institutions, and active role groups.
+   - **User Administration** (`/super-admin/users`): Create, edit, and suspend users across all four roles; newly created users can sign in immediately.
+   - **Campus Institutions** (`/super-admin/institutions`): Register partner institutions and manage campus locations.
+   - **Permissions Matrix** (`/super-admin/permissions`): Audit access control policies.
+   - **Platform Settings** (`/super-admin/settings`): Configure university details, placement season, and support contact channels.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+6. **Design & Theming**:
+   - Full Light/Dark mode with automatic local storage persistence.
+   - Responsive layout for desktop, tablet, and mobile.
+   - Clean, modern SaaS design inspired by modern enterprise tooling.

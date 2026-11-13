@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getSessionFromRequest } from "@/lib/auth";
-import { demoUsers } from "@/lib/mock-data";
+import { getPortalData } from "@/lib/portal-data";
 
 export async function GET(request: Request) {
   const session = getSessionFromRequest(request);
@@ -14,20 +14,11 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: false, message: "Access denied: insufficient permissions.", error: { code: "FORBIDDEN" } }, { status: 403 });
   }
 
-  const students = demoUsers
-    .filter((user) => user.role === "student")
-    .map((user) => ({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      department: "Computer Science & Engineering",
-      cgpa: "8.9",
-      status: "Eligible",
-    }));
+  const students = getPortalData("students");
 
   return NextResponse.json({
     success: true,
     message: "Student records fetched successfully.",
-    data: students,
+    data: Array.isArray(students) ? students : [],
   });
 }

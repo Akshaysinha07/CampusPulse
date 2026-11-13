@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getSessionFromRequest } from "@/lib/auth";
-import { demoUsers } from "@/lib/mock-data";
+import { findUserById } from "@/lib/portal-data";
 
 export async function GET(request: Request) {
   const session = getSessionFromRequest(request);
@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const user = demoUsers.find((entry) => entry.id === session.id);
+  const user = findUserById(session.id);
 
   if (!user) {
     return NextResponse.json(

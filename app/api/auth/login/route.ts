@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { buildCookieOptions, signSession } from "@/lib/auth";
-import { demoUsers } from "@/lib/mock-data";
+import { verifyUserCredentials } from "@/lib/portal-data";
 
 export async function POST(request: Request) {
   try {
@@ -20,8 +20,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const user = demoUsers.find((entry) => entry.email.toLowerCase() === email);
-    if (!user || user.password !== password) {
+    const user = verifyUserCredentials(email, password);
+    if (!user) {
       return NextResponse.json(
         {
           success: false,
